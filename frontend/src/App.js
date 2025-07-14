@@ -103,7 +103,9 @@ function App() {
   return (
     <AuthProvider>
       <DeviceProvider>
-        <AppContent />
+        <CartProvider>
+          <AppContent />
+        </CartProvider>
       </DeviceProvider>
     </AuthProvider>
   );
