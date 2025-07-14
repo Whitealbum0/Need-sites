@@ -32,22 +32,27 @@ const MobileNavbar = () => {
       <nav className="bg-white shadow-lg relative z-40">
         <div className="px-4">
           <div className="flex justify-between items-center h-14">
-            {/* Логотип */}
+            {/* Логотип и корзина */}
             <div className="flex items-center">
               <a href="/" className="text-lg font-bold text-blue-600">
                 🛍️ Магазин
               </a>
             </div>
             
-            {/* Кнопка меню */}
-            <button 
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-colors"
-            >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+            <div className="flex items-center space-x-2">
+              {/* Корзина */}
+              <CartIcon onClick={() => window.location.href = '/cart'} />
+              
+              {/* Кнопка меню */}
+              <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-colors"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </nav>
