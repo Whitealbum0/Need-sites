@@ -111,15 +111,15 @@ const DesktopCategories = () => {
                     <div className="space-y-2 mb-4">
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500">Цена от:</span>
-                        <span className="font-medium">{Math.round(stats.minPrice)} ₽</span>
+                        <span className="font-medium">{Math.round(stats.min_price)} ₽</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500">Цена до:</span>
-                        <span className="font-medium">{Math.round(stats.maxPrice)} ₽</span>
+                        <span className="font-medium">{Math.round(stats.max_price)} ₽</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500">Средняя цена:</span>
-                        <span className="font-medium">{Math.round(stats.avgPrice)} ₽</span>
+                        <span className="font-medium">{Math.round(stats.avg_price)} ₽</span>
                       </div>
                     </div>
                   )}
