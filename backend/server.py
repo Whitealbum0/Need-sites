@@ -254,9 +254,12 @@ async def get_products(
     background_tasks: BackgroundTasks,
     category: Optional[str] = None,
     search: Optional[str] = None,
+    min_price: Optional[float] = None,
+    max_price: Optional[float] = None,
+    sort_by: Optional[str] = None,
     user: Optional[User] = Depends(get_current_user)
 ):
-    """Get all active products"""
+    """Get all active products with advanced filtering"""
     background_tasks.add_task(track_visitor, request, background_tasks, "products", user)
     
     query = {"status": ProductStatus.ACTIVE}
@@ -267,10 +270,36 @@ async def get_products(
     if search:
         query["$or"] = [
             {"name": {"$regex": search, "$options": "i"}},
-            {"description": {"$regex": search, "$options": "i"}}
+            {"description": {"$regex": search, "$options": "i"}},
+            {"category": {"$regex": search, "$options": "i"}}
         ]
     
-    products = await db.products.find(query).to_list(1000)
+    # Price filtering
+    if min_price is not None or max_price is not None:
+        price_filter = {}
+        if min_price is not None:
+            price_filter["$gte"] = min_price
+        if max_price is not None:
+            price_filter["$lte"] = max_price
+        query["price"] = price_filter
+    
+    # Get products
+    products_cursor = db.products.find(query)
+    
+    # Apply sorting
+    if sort_by:
+        if sort_by == "price_low":
+            products_cursor = products_cursor.sort("price", 1)
+        elif sort_by == "price_high":
+            products_cursor = products_cursor.sort("price", -1)
+        elif sort_by == "name":
+            products_cursor = products_cursor.sort("name", 1)
+        elif sort_by == "newest":
+            products_cursor = products_cursor.sort("created_at", -1)
+        elif sort_by == "oldest":
+            products_cursor = products_cursor.sort("created_at", 1)
+    
+    products = await products_cursor.to_list(1000)
     return [Product(**product) for product in products]
 
 @api_router.get("/products/{product_id}")
