@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -19,7 +19,7 @@ export const useProducts = (options = {}) => {
     autoFetch = true
   } = options;
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -45,17 +45,17 @@ export const useProducts = (options = {}) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [category, search, minPrice, maxPrice, sortBy, limit]);
 
   useEffect(() => {
     if (autoFetch) {
       fetchProducts();
     }
-  }, [category, search, minPrice, maxPrice, sortBy, limit, autoFetch]);
+  }, [fetchProducts, autoFetch]);
 
-  const refetch = () => {
+  const refetch = useCallback(() => {
     fetchProducts();
-  };
+  }, [fetchProducts]);
 
   return {
     products,
