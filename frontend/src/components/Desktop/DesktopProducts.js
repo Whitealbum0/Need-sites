@@ -263,7 +263,6 @@ const DesktopProducts = () => {
                     key={product.id}
                     product={product}
                     variant="desktop"
-                    onAddToCart={(product) => console.log('Add to cart:', product)}
                     onAddToFavorites={(product) => console.log('Add to favorites:', product)}
                   />
                 ))}
