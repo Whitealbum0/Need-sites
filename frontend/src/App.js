@@ -12,10 +12,12 @@ import DeviceSwitcher from './components/Common/DeviceSwitcher';
 // Десктопные компоненты
 import DesktopNavbar from './components/Desktop/DesktopNavbar';
 import DesktopHome from './components/Desktop/DesktopHome';
+import DesktopProducts from './components/Desktop/DesktopProducts';
 
 // Мобильные компоненты
 import MobileNavbar from './components/Mobile/MobileNavbar';
 import MobileHome from './components/Mobile/MobileHome';
+import MobileProducts from './components/Mobile/MobileProducts';
 
 // Главный компонент приложения
 const AppContent = () => {
