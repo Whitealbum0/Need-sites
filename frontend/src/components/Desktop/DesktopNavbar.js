@@ -46,6 +46,28 @@ const DesktopNavbar = () => {
               О нас
             </a>
             
+            {/* Контакты */}
+            <div className="relative">
+              <button 
+                onClick={() => setIsContactOpen(!isContactOpen)}
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors flex items-center space-x-1"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span>Контакты</span>
+              </button>
+              
+              {isContactOpen && (
+                <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg border p-4 z-20">
+                  <ContactInfo variant="desktop" />
+                </div>
+              )}
+            </div>
+            
+            {/* Корзина */}
+            <CartIcon onClick={() => window.location.href = '/cart'} />
+            
             {user ? (
               <div className="relative">
                 <button 
@@ -75,6 +97,9 @@ const DesktopNavbar = () => {
                     
                     <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       Мой профиль
+                    </a>
+                    <a href="/cart" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      Корзина
                     </a>
                     <a href="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       Мои заказы
