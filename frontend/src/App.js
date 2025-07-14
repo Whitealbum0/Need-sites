@@ -53,11 +53,30 @@ const AppContent = () => {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
+        <Suspense fallback={<LoadingSpinner size="large" text="Загрузка..." />}>
+          <Navbar />
+        </Suspense>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/" element={
+            <Suspense fallback={<LoadingSpinner size="large" text="Загрузка главной страницы..." />}>
+              <Home />
+            </Suspense>
+          } />
+          <Route path="/products" element={
+            <Suspense fallback={<LoadingSpinner size="large" text="Загрузка каталога..." />}>
+              <Products />
+            </Suspense>
+          } />
+          <Route path="/categories" element={
+            <Suspense fallback={<LoadingSpinner size="large" text="Загрузка категорий..." />}>
+              <Categories />
+            </Suspense>
+          } />
+          <Route path="/cart" element={
+            <Suspense fallback={<LoadingSpinner size="large" text="Загрузка корзины..." />}>
+              <Cart />
+            </Suspense>
+          } />
           <Route path="/products/:id" element={
             <div className="p-8 text-center">
               <h1 className="text-2xl font-bold mb-4">Детали товара</h1>
@@ -96,7 +115,6 @@ const AppContent = () => {
               <p className="text-gray-600">Пожалуйста, подождите</p>
             </div>
           } />
-          <Route path="/categories" element={<Categories />} />
           <Route path="/about" element={
             <div className="p-8 text-center">
               <h1 className="text-2xl font-bold mb-4">О нас</h1>
