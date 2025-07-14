@@ -76,14 +76,7 @@ const AppContent = () => {
               <p className="text-gray-600">Пожалуйста, подождите</p>
             </div>
           } />
-          <Route path="/categories" element={
-            <div className="p-8 text-center">
-              <h1 className="text-2xl font-bold mb-4">Категории</h1>
-              <p className="text-gray-600">
-                {isMobile ? 'Мобильная' : 'Десктопная'} версия категорий в разработке
-              </p>
-            </div>
-          } />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/about" element={
             <div className="p-8 text-center">
               <h1 className="text-2xl font-bold mb-4">О нас</h1>
