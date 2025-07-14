@@ -105,12 +105,12 @@ const DesktopHome = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Расширенный Hero Section для десктопа */}
+      {/* Расширенный Hero Section для десктопа с пролистываемым слайд-шоу */}
       <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
+            <div className="space-y-8 z-10">
               <div>
                 <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
                   Премиум
@@ -153,17 +153,90 @@ const DesktopHome = () => {
               </div>
             </div>
             
-            <div className="relative">
-              <div className="relative z-10">
-                <img 
-                  src="https://images.unsplash.com/photo-1592839930500-3445eb72b8ad?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxvbmxpbmUlMjBzaG9wcGluZ3xlbnwwfHx8Ymx1ZXwxNzUyNDg0Nzk5fDA&ixlib=rb-4.1.0&q=85"
-                  alt="Премиум покупки"
-                  className="rounded-2xl shadow-2xl"
+            {/* Десктопное Hero слайд-шоу */}
+            <div className="relative z-10">
+              <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+                <div 
+                  className="flex transition-transform duration-700 ease-in-out"
+                  style={{ transform: `translateX(-${currentHeroSlide * 100}%)` }}
+                >
+                  {heroImages.map((image, index) => (
+                    <div key={index} className="w-full flex-shrink-0 relative">
+                      <img 
+                        src={image.url}
+                        alt={image.title}
+                        className="w-full h-96 object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                      
+                      {/* Информация о слайде */}
+                      <div className="absolute bottom-6 left-6 text-white">
+                        <h3 className="text-2xl font-bold mb-2">{image.title}</h3>
+                        <p className="text-lg text-gray-200">{image.subtitle}</p>
+                      </div>
+                      
+                      {/* Индикатор номера слайда */}
+                      <div className="absolute top-6 right-6">
+                        <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                          <span className="text-white font-semibold">
+                            {index + 1} / {heroImages.length}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Навигационные кнопки для Hero слайд-шоу */}
+                <button
+                  onClick={prevHeroSlide}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-4 rounded-full shadow-xl transition-all duration-300 hover:scale-110 z-20"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                
+                <button
+                  onClick={nextHeroSlide}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-4 rounded-full shadow-xl transition-all duration-300 hover:scale-110 z-20"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+              
+              {/* Индикаторы Hero слайдов */}
+              <div className="flex justify-center mt-6 space-x-3">
+                {heroImages.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToHeroSlide(index)}
+                    className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                      index === currentHeroSlide 
+                        ? 'bg-white scale-125 shadow-lg' 
+                        : 'bg-white/50 hover:bg-white/75'
+                    }`}
+                  />
+                ))}
+              </div>
+              
+              {/* Прогресс-бар автоматического переключения */}
+              <div className="mt-4 bg-white/20 rounded-full h-2 overflow-hidden">
+                <div 
+                  className="bg-white h-full transition-all duration-6000 ease-linear"
+                  style={{ 
+                    width: `${((currentHeroSlide + 1) / heroImages.length) * 100}%`,
+                    animation: 'progress 6s linear infinite'
+                  }}
                 />
               </div>
-              <div className="absolute -top-4 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-              <div className="absolute -bottom-8 -left-4 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
             </div>
+            
+            {/* Декоративные элементы */}
+            <div className="absolute -top-4 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+            <div className="absolute -bottom-8 -left-4 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
           </div>
         </div>
       </div>
