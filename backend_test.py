@@ -653,6 +653,16 @@ class BackendTester:
         self.test_product_category_filter()
         self.test_invalid_product_id()
         
+        # NEW: Enhanced Category and Filtering Tests
+        print("\n🏷️ ENHANCED CATEGORY & FILTERING TESTS")
+        print("-" * 40)
+        self.test_categories_stats_endpoint()
+        self.test_product_price_filtering()
+        self.test_product_sorting()
+        self.test_advanced_search_functionality()
+        self.test_combined_filtering()
+        self.test_edge_cases()
+        
         # Visitor tracking tests
         print("\n📊 VISITOR TRACKING TESTS")
         print("-" * 40)
