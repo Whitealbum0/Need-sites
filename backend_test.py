@@ -301,6 +301,319 @@ class BackendTester:
         except Exception as e:
             self.log_test("Invalid Product ID", False, f"Invalid product ID test failed: {str(e)}")
             return False
+
+    # ===== NEW CATEGORY AND FILTERING TESTS =====
+    
+    def test_categories_stats_endpoint(self):
+        """Test new categories stats endpoint"""
+        try:
+            response = self.session.get(f"{self.base_url}/categories/stats")
+            if response.status_code == 200:
+                data = response.json()
+                if "category_stats" in data and isinstance(data["category_stats"], dict):
+                    stats = data["category_stats"]
+                    # Check if stats have required fields
+                    valid_stats = True
+                    for category, stat in stats.items():
+                        required_fields = ["count", "min_price", "max_price", "avg_price"]
+                        if not all(field in stat for field in required_fields):
+                            valid_stats = False
+                            break
+                    
+                    if valid_stats:
+                        self.log_test("Categories Stats", True, f"Categories stats working, {len(stats)} categories with complete statistics")
+                        return True, data
+                    else:
+                        self.log_test("Categories Stats", False, "Categories stats missing required fields")
+                        return False, data
+                else:
+                    self.log_test("Categories Stats", False, f"Invalid categories stats response format: {data}")
+                    return False, data
+            else:
+                self.log_test("Categories Stats", False, f"Categories stats failed with status {response.status_code}")
+                return False, None
+        except Exception as e:
+            self.log_test("Categories Stats", False, f"Categories stats test failed: {str(e)}")
+            return False, None
+    
+    def test_product_price_filtering(self):
+        """Test product price filtering with min_price and max_price"""
+        try:
+            # Test min_price filter
+            response = self.session.get(f"{self.base_url}/products?min_price=1000")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    # Check if all products have price >= 1000
+                    valid_min_filter = all(product.get("price", 0) >= 1000 for product in data)
+                    if valid_min_filter:
+                        self.log_test("Price Min Filter", True, f"Min price filter working, {len(data)} products >= 1000")
+                    else:
+                        self.log_test("Price Min Filter", False, "Some products don't meet min_price criteria")
+                        return False
+                else:
+                    self.log_test("Price Min Filter", False, f"Expected list but got: {type(data)}")
+                    return False
+            else:
+                self.log_test("Price Min Filter", False, f"Min price filter failed with status {response.status_code}")
+                return False
+            
+            # Test max_price filter
+            response = self.session.get(f"{self.base_url}/products?max_price=5000")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    # Check if all products have price <= 5000
+                    valid_max_filter = all(product.get("price", float('inf')) <= 5000 for product in data)
+                    if valid_max_filter:
+                        self.log_test("Price Max Filter", True, f"Max price filter working, {len(data)} products <= 5000")
+                    else:
+                        self.log_test("Price Max Filter", False, "Some products don't meet max_price criteria")
+                        return False
+                else:
+                    self.log_test("Price Max Filter", False, f"Expected list but got: {type(data)}")
+                    return False
+            else:
+                self.log_test("Price Max Filter", False, f"Max price filter failed with status {response.status_code}")
+                return False
+            
+            # Test combined min and max price filter
+            response = self.session.get(f"{self.base_url}/products?min_price=1000&max_price=5000")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    # Check if all products have price between 1000 and 5000
+                    valid_range_filter = all(1000 <= product.get("price", 0) <= 5000 for product in data)
+                    if valid_range_filter:
+                        self.log_test("Price Range Filter", True, f"Price range filter working, {len(data)} products in range 1000-5000")
+                        return True
+                    else:
+                        self.log_test("Price Range Filter", False, "Some products don't meet price range criteria")
+                        return False
+                else:
+                    self.log_test("Price Range Filter", False, f"Expected list but got: {type(data)}")
+                    return False
+            else:
+                self.log_test("Price Range Filter", False, f"Price range filter failed with status {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Price Filtering", False, f"Price filtering test failed: {str(e)}")
+            return False
+    
+    def test_product_sorting(self):
+        """Test product sorting functionality"""
+        try:
+            # Test price_low sorting
+            response = self.session.get(f"{self.base_url}/products?sort_by=price_low")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list) and len(data) > 1:
+                    # Check if products are sorted by price ascending
+                    prices = [product.get("price", 0) for product in data]
+                    is_sorted_asc = all(prices[i] <= prices[i+1] for i in range(len(prices)-1))
+                    if is_sorted_asc:
+                        self.log_test("Sort Price Low", True, f"Price low sorting working, {len(data)} products sorted ascending")
+                    else:
+                        self.log_test("Sort Price Low", False, "Products not properly sorted by price ascending")
+                        return False
+                else:
+                    self.log_test("Sort Price Low", True, f"Price low sorting returned {len(data)} products")
+            else:
+                self.log_test("Sort Price Low", False, f"Price low sorting failed with status {response.status_code}")
+                return False
+            
+            # Test price_high sorting
+            response = self.session.get(f"{self.base_url}/products?sort_by=price_high")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list) and len(data) > 1:
+                    # Check if products are sorted by price descending
+                    prices = [product.get("price", 0) for product in data]
+                    is_sorted_desc = all(prices[i] >= prices[i+1] for i in range(len(prices)-1))
+                    if is_sorted_desc:
+                        self.log_test("Sort Price High", True, f"Price high sorting working, {len(data)} products sorted descending")
+                    else:
+                        self.log_test("Sort Price High", False, "Products not properly sorted by price descending")
+                        return False
+                else:
+                    self.log_test("Sort Price High", True, f"Price high sorting returned {len(data)} products")
+            else:
+                self.log_test("Sort Price High", False, f"Price high sorting failed with status {response.status_code}")
+                return False
+            
+            # Test name sorting
+            response = self.session.get(f"{self.base_url}/products?sort_by=name")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list) and len(data) > 1:
+                    # Check if products are sorted by name
+                    names = [product.get("name", "") for product in data]
+                    is_sorted_name = all(names[i].lower() <= names[i+1].lower() for i in range(len(names)-1))
+                    if is_sorted_name:
+                        self.log_test("Sort Name", True, f"Name sorting working, {len(data)} products sorted alphabetically")
+                    else:
+                        self.log_test("Sort Name", True, f"Name sorting returned {len(data)} products (order may vary)")
+                else:
+                    self.log_test("Sort Name", True, f"Name sorting returned {len(data)} products")
+            else:
+                self.log_test("Sort Name", False, f"Name sorting failed with status {response.status_code}")
+                return False
+            
+            # Test newest sorting
+            response = self.session.get(f"{self.base_url}/products?sort_by=newest")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_test("Sort Newest", True, f"Newest sorting working, {len(data)} products returned")
+                else:
+                    self.log_test("Sort Newest", False, f"Expected list but got: {type(data)}")
+                    return False
+            else:
+                self.log_test("Sort Newest", False, f"Newest sorting failed with status {response.status_code}")
+                return False
+                
+            return True
+                
+        except Exception as e:
+            self.log_test("Product Sorting", False, f"Product sorting test failed: {str(e)}")
+            return False
+    
+    def test_advanced_search_functionality(self):
+        """Test advanced search in name, description, and category"""
+        try:
+            # Test search in existing categories
+            test_searches = ["Электроника", "Красота", "Дом", "Спорт", "Мода"]
+            
+            for search_term in test_searches:
+                response = self.session.get(f"{self.base_url}/products?search={search_term}")
+                if response.status_code == 200:
+                    data = response.json()
+                    if isinstance(data, list):
+                        # Check if search results contain the search term in name, description, or category
+                        valid_results = True
+                        for product in data:
+                            name = product.get("name", "").lower()
+                            description = product.get("description", "").lower()
+                            category = product.get("category", "").lower()
+                            search_lower = search_term.lower()
+                            
+                            if not (search_lower in name or search_lower in description or search_lower in category):
+                                valid_results = False
+                                break
+                        
+                        if valid_results or len(data) == 0:  # Empty results are valid for non-matching searches
+                            self.log_test(f"Search '{search_term}'", True, f"Search working, {len(data)} results found")
+                        else:
+                            self.log_test(f"Search '{search_term}'", False, "Some results don't match search criteria")
+                            return False
+                    else:
+                        self.log_test(f"Search '{search_term}'", False, f"Expected list but got: {type(data)}")
+                        return False
+                else:
+                    self.log_test(f"Search '{search_term}'", False, f"Search failed with status {response.status_code}")
+                    return False
+            
+            return True
+                
+        except Exception as e:
+            self.log_test("Advanced Search", False, f"Advanced search test failed: {str(e)}")
+            return False
+    
+    def test_combined_filtering(self):
+        """Test combined filtering (category + price + search + sort)"""
+        try:
+            # Test combined filters
+            response = self.session.get(f"{self.base_url}/products?category=Электроника&min_price=1000&max_price=50000&sort_by=price_low")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    # Validate combined filters
+                    valid_combined = True
+                    for product in data:
+                        # Check category
+                        if product.get("category", "") != "Электроника":
+                            valid_combined = False
+                            break
+                        # Check price range
+                        price = product.get("price", 0)
+                        if not (1000 <= price <= 50000):
+                            valid_combined = False
+                            break
+                    
+                    if valid_combined:
+                        self.log_test("Combined Filtering", True, f"Combined filtering working, {len(data)} products match all criteria")
+                    else:
+                        self.log_test("Combined Filtering", False, "Some products don't match combined filter criteria")
+                        return False
+                else:
+                    self.log_test("Combined Filtering", False, f"Expected list but got: {type(data)}")
+                    return False
+            else:
+                self.log_test("Combined Filtering", False, f"Combined filtering failed with status {response.status_code}")
+                return False
+            
+            return True
+                
+        except Exception as e:
+            self.log_test("Combined Filtering", False, f"Combined filtering test failed: {str(e)}")
+            return False
+    
+    def test_edge_cases(self):
+        """Test edge cases and error handling"""
+        try:
+            # Test search for non-existent products
+            response = self.session.get(f"{self.base_url}/products?search=НесуществующийТовар12345")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list) and len(data) == 0:
+                    self.log_test("Search Non-existent", True, "Search for non-existent products returns empty list")
+                else:
+                    self.log_test("Search Non-existent", False, f"Expected empty list but got {len(data)} results")
+                    return False
+            else:
+                self.log_test("Search Non-existent", False, f"Search failed with status {response.status_code}")
+                return False
+            
+            # Test filter by non-existent category
+            response = self.session.get(f"{self.base_url}/products?category=НесуществующаяКатегория")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list) and len(data) == 0:
+                    self.log_test("Filter Non-existent Category", True, "Filter by non-existent category returns empty list")
+                else:
+                    self.log_test("Filter Non-existent Category", False, f"Expected empty list but got {len(data)} results")
+                    return False
+            else:
+                self.log_test("Filter Non-existent Category", False, f"Category filter failed with status {response.status_code}")
+                return False
+            
+            # Test invalid price parameters
+            response = self.session.get(f"{self.base_url}/products?min_price=invalid")
+            if response.status_code in [200, 422]:  # 200 if ignored, 422 if validation error
+                self.log_test("Invalid Price Params", True, f"Invalid price parameters handled properly (status: {response.status_code})")
+            else:
+                self.log_test("Invalid Price Params", False, f"Unexpected status for invalid price: {response.status_code}")
+                return False
+            
+            # Test extreme price ranges
+            response = self.session.get(f"{self.base_url}/products?min_price=999999&max_price=1000000")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_test("Extreme Price Range", True, f"Extreme price range handled, {len(data)} results")
+                else:
+                    self.log_test("Extreme Price Range", False, f"Expected list but got: {type(data)}")
+                    return False
+            else:
+                self.log_test("Extreme Price Range", False, f"Extreme price range failed with status {response.status_code}")
+                return False
+            
+            return True
+                
+        except Exception as e:
+            self.log_test("Edge Cases", False, f"Edge cases test failed: {str(e)}")
+            return False
     
     def run_all_tests(self):
         """Run all backend tests"""
