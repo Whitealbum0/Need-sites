@@ -134,13 +134,17 @@ const AppContent = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <DeviceProvider>
-        <CartProvider>
-          <AppContent />
-        </CartProvider>
-      </DeviceProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <DeviceProvider>
+          <CartProvider>
+            <AppContent />
+          </CartProvider>
+        </DeviceProvider>
+      </AuthProvider>
+      {/* React Query DevTools только в development */}
+      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+    </QueryClientProvider>
   );
 }
 
