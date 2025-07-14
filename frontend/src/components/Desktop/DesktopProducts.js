@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useProducts, useCategories } from '../../hooks/useProducts';
 import ProductCard from '../Common/ProductCard';
 import LoadingSpinner from '../Common/LoadingSpinner';
 
 const DesktopProducts = () => {
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('name');
-  const [priceRange, setPriceRange] = useState('all');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'name');
+  const [priceRange, setPriceRange] = useState(searchParams.get('priceRange') || 'all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const { products, loading, error, refetch } = useProducts({
