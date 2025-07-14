@@ -91,13 +91,8 @@ const ProductCard = ({
               Подробнее
             </a>
             
-            {onAddToCart && product.stock > 0 && (
-              <button
-                onClick={handleAddToCart}
-                className="w-full border border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
-              >
-                В корзину
-              </button>
+            {product.stock > 0 && (
+              <CartButton product={product} variant="secondary" />
             )}
           </div>
         </div>
