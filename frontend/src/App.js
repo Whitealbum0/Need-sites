@@ -15,12 +15,14 @@ import DesktopNavbar from './components/Desktop/DesktopNavbar';
 import DesktopHome from './components/Desktop/DesktopHome';
 import DesktopProducts from './components/Desktop/DesktopProducts';
 import DesktopCategories from './components/Desktop/DesktopCategories';
+import DesktopCart from './components/Desktop/DesktopCart';
 
 // Мобильные компоненты
 import MobileNavbar from './components/Mobile/MobileNavbar';
 import MobileHome from './components/Mobile/MobileHome';
 import MobileProducts from './components/Mobile/MobileProducts';
 import MobileCategories from './components/Mobile/MobileCategories';
+import MobileCart from './components/Mobile/MobileCart';
 
 // Главный компонент приложения
 const AppContent = () => {
