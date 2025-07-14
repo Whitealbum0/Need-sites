@@ -297,11 +297,11 @@ metadata:
 
 test_plan:
   current_focus:
+    - "Device Detection and Switching System"
+    - "Desktop Interface Components"
+    - "Mobile Interface Components"
+    - "Device Switcher Widget"
     - "User Authentication with Emergent Auth"
-    - "Admin vs User Role System"
-    - "Product Management API"
-    - "User Authentication UI"
-    - "Admin vs User Interface Separation"
     - "Product Catalog and Management"
   stuck_tasks: []
   test_all: true
