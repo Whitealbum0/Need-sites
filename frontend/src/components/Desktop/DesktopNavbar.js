@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useCart } from '../../contexts/CartContext';
+import CartIcon from '../Common/CartIcon';
+import ContactInfo from '../Common/ContactInfo';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -8,6 +11,7 @@ const API = `${BACKEND_URL}/api`;
 const DesktopNavbar = () => {
   const { user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
   const handleLogin = async () => {
     try {
