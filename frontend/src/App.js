@@ -42,6 +42,7 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/products/:id" element={
             <div className="p-8 text-center">
               <h1 className="text-2xl font-bold mb-4">Детали товара</h1>
