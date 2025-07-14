@@ -1,30 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCategories, useProducts } from '../../hooks/useProducts';
+import { useCategories, useProducts, useCategoryStats } from '../../hooks/useProducts';
 import LoadingSpinner from '../Common/LoadingSpinner';
 
 const DesktopCategories = () => {
   const navigate = useNavigate();
   const { categories, loading: categoriesLoading } = useCategories();
   const { products } = useProducts();
-  
-  const [categoryStats, setCategoryStats] = useState({});
-
-  useEffect(() => {
-    if (products.length > 0) {
-      const stats = categories.reduce((acc, category) => {
-        const categoryProducts = products.filter(p => p.category === category);
-        acc[category] = {
-          count: categoryProducts.length,
-          minPrice: Math.min(...categoryProducts.map(p => p.price)),
-          maxPrice: Math.max(...categoryProducts.map(p => p.price)),
-          avgPrice: categoryProducts.reduce((sum, p) => sum + p.price, 0) / categoryProducts.length
-        };
-        return acc;
-      }, {});
-      setCategoryStats(stats);
-    }
-  }, [products, categories]);
+  const { categoryStats, loading: statsLoading } = useCategoryStats();
 
   const handleCategoryClick = (category) => {
     navigate(`/products?category=${encodeURIComponent(category)}`);
