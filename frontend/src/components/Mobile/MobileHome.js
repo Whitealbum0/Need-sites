@@ -1,0 +1,268 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
+const MobileHome = () => {
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFeaturedProducts();
+  }, []);
+
+  const fetchFeaturedProducts = async () => {
+    try {
+      const response = await axios.get(`${API}/products`);
+      setFeaturedProducts(response.data.slice(0, 6));
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Мобильный Hero Section */}
+      <div className="bg-gradient-to-br from-blue-600 to-purple-600 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-black opacity-10"></div>
+        <div className="relative px-4 py-12">
+          <div className="text-center space-y-6">
+            <h1 className="text-3xl font-bold leading-tight">
+              Современный
+              <br />
+              <span className="text-yellow-300">Интернет-Магазин</span>
+            </h1>
+            <p className="text-lg text-blue-100 leading-relaxed px-4">
+              Качественные товары, быстрая доставка, надёжный сервис
+            </p>
+            
+            <div className="space-y-3 pt-4">
+              <a 
+                href="/products" 
+                className="block bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold mx-4 text-center shadow-lg"
+              >
+                🛍️ Посмотреть товары
+              </a>
+              <a 
+                href="#features" 
+                className="block border-2 border-white text-white px-6 py-3 rounded-xl font-semibold mx-4 text-center"
+              >
+                📖 Узнать больше
+              </a>
+            </div>
+
+            <div className="flex justify-center space-x-8 pt-6">
+              <div className="text-center">
+                <div className="text-2xl font-bold">1000+</div>
+                <div className="text-blue-200 text-sm">Товаров</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold">50+</div>
+                <div className="text-blue-200 text-sm">Категорий</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold">24/7</div>
+                <div className="text-blue-200 text-sm">Поддержка</div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-8 px-4">
+            <img 
+              src="https://images.unsplash.com/photo-1592839930500-3445eb72b8ad?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxvbmxpbmUlMjBzaG9wcGluZ3xlbnwwfHx8Ymx1ZXwxNzUyNDg0Nzk5fDA&ixlib=rb-4.1.0&q=85"
+              alt="Мобильные покупки"
+              className="rounded-xl shadow-2xl w-full"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Быстрые категории для мобильных */}
+      <div className="py-8 bg-white">
+        <div className="px-4">
+          <h2 className="text-2xl font-bold text-center mb-6">Категории</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <a href="/products?category=electronics" className="bg-blue-50 p-4 rounded-xl text-center hover:bg-blue-100 transition-colors">
+              <div className="text-3xl mb-2">📱</div>
+              <div className="font-semibold text-blue-700">Электроника</div>
+            </a>
+            <a href="/products?category=beauty" className="bg-pink-50 p-4 rounded-xl text-center hover:bg-pink-100 transition-colors">
+              <div className="text-3xl mb-2">💄</div>
+              <div className="font-semibold text-pink-700">Красота</div>
+            </a>
+            <a href="/products?category=clothing" className="bg-green-50 p-4 rounded-xl text-center hover:bg-green-100 transition-colors">
+              <div className="text-3xl mb-2">👕</div>
+              <div className="font-semibold text-green-700">Одежда</div>
+            </a>
+            <a href="/products?category=home" className="bg-orange-50 p-4 rounded-xl text-center hover:bg-orange-100 transition-colors">
+              <div className="text-3xl mb-2">🏠</div>
+              <div className="font-semibold text-orange-700">Дом</div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Мобильные Features */}
+      <div id="features" className="py-12 bg-gray-50">
+        <div className="px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+              Почему выбирают нас?
+            </h2>
+            <p className="text-gray-600">
+              Лучший сервис для наших клиентов
+            </p>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <div className="flex items-start space-x-4">
+                <div className="bg-blue-100 rounded-xl w-12 h-12 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Быстрая доставка</h3>
+                  <p className="text-gray-600 text-sm">Доставляем товары в кратчайшие сроки по всей стране</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <div className="flex items-start space-x-4">
+                <div className="bg-green-100 rounded-xl w-12 h-12 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Качественные товары</h3>
+                  <p className="text-gray-600 text-sm">Только проверенные товары от надёжных поставщиков</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <div className="flex items-start space-x-4">
+                <div className="bg-purple-100 rounded-xl w-12 h-12 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 110 19.5 9.75 9.75 0 010-19.5zM8.25 8.25h7.5v7.5h-7.5v-7.5z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Поддержка 24/7</h3>
+                  <p className="text-gray-600 text-sm">Круглосуточная поддержка для решения любых вопросов</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Мобильная витрина товаров */}
+      <div className="py-12 bg-white">
+        <div className="px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+              Популярные товары
+            </h2>
+            <p className="text-gray-600">
+              Лучшие предложения для вас
+            </p>
+          </div>
+          
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            </div>
+          ) : featuredProducts.length > 0 ? (
+            <div className="space-y-4">
+              {featuredProducts.map((product) => (
+                <div key={product.id} className="bg-gray-50 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex">
+                    {product.images && product.images.length > 0 ? (
+                      <img 
+                        src={`data:image/jpeg;base64,${product.images[0]}`}
+                        alt={product.name}
+                        className="w-24 h-24 object-cover flex-shrink-0"
+                      />
+                    ) : (
+                      <div className="w-24 h-24 bg-gray-200 flex items-center justify-center flex-shrink-0">
+                        <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                    )}
+                    
+                    <div className="flex-1 p-4">
+                      <h3 className="font-semibold text-gray-900 mb-1 line-clamp-2 text-sm">
+                        {product.name}
+                      </h3>
+                      <p className="text-xs text-gray-600 mb-2 line-clamp-2">
+                        {product.description}
+                      </p>
+                      
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <span className="text-lg font-bold text-blue-600">
+                            {product.price.toLocaleString()} ₽
+                          </span>
+                          <div className="text-xs text-gray-500">
+                            {product.category}
+                          </div>
+                        </div>
+                        <a 
+                          href={`/products/${product.id}`}
+                          className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-semibold hover:bg-blue-700 transition-colors"
+                        >
+                          Купить
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-gray-500">Товары скоро появятся</p>
+            </div>
+          )}
+          
+          <div className="text-center mt-8">
+            <a 
+              href="/products" 
+              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+            >
+              Посмотреть все товары
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Мобильный призыв к действию */}
+      <div className="py-12 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div className="px-4 text-center">
+          <h2 className="text-2xl font-bold mb-4">
+            Готовы начать покупки?
+          </h2>
+          <p className="text-blue-100 mb-6">
+            Присоединяйтесь к тысячам довольных клиентов
+          </p>
+          <a 
+            href="/products" 
+            className="inline-block bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors"
+          >
+            Начать покупки
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MobileHome;
