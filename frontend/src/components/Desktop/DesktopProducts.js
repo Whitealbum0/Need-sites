@@ -89,6 +89,7 @@ const DesktopProducts = () => {
     setSearchTerm('');
     setSortBy('name');
     setPriceRange('all');
+    setSearchParams({});
   };
 
   return (
