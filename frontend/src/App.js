@@ -240,7 +240,7 @@ const Home = () => {
     if (featuredProducts.length > 0) {
       const interval = setInterval(() => {
         setCurrentSlide((prev) => (prev + 1) % featuredProducts.length);
-      }, 4000); // Автоматическая прокрутка каждые 4 секунды
+      }, 4000);
 
       return () => clearInterval(interval);
     }
@@ -249,7 +249,7 @@ const Home = () => {
   const fetchFeaturedProducts = async () => {
     try {
       const response = await axios.get(`${API}/products`);
-      setFeaturedProducts(response.data.slice(0, 6)); // Увеличиваем до 6 товаров для слайд-шоу
+      setFeaturedProducts(response.data.slice(0, 6));
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -353,3 +353,183 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      {/* Featured Products */}
+      <div className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Популярные товары
+            </h2>
+            <p className="text-gray-600 text-lg">
+              Лучшие предложения для вас
+            </p>
+          </div>
+          
+          {loading ? (
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            </div>
+          ) : featuredProducts.length > 0 ? (
+            <>
+              {/* Desktop Slideshow */}
+              <div className="hidden md:block">
+                <div className="relative overflow-hidden rounded-lg shadow-lg">
+                  <div 
+                    className="flex transition-transform duration-500 ease-in-out"
+                    style={{ transform: `translateX(-${currentSlide * 33.333}%)` }}
+                  >
+                    {featuredProducts.map((product, index) => (
+                      <div key={product.id} className="w-1/3 flex-shrink-0 px-2">
+                        <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full">
+                          {product.images && product.images.length > 0 ? (
+                            <img 
+                              src={`data:image/jpeg;base64,${product.images[0]}`}
+                              alt={product.name}
+                              className="w-full h-64 object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
+                              <span className="text-gray-400">Нет изображения</span>
+                            </div>
+                          )}
+                          
+                          <div className="p-6">
+                            <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
+                            <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
+                            <div className="flex justify-between items-center">
+                              <span className="text-2xl font-bold text-blue-600">
+                                {product.price} ₽
+                              </span>
+                              <a 
+                                href={`/products/${product.id}`}
+                                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                              >
+                                Подробнее
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Navigation Buttons */}
+                  <button
+                    onClick={prevSlide}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  
+                  <button
+                    onClick={nextSlide}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+                
+                {/* Slide Indicators */}
+                <div className="flex justify-center mt-6 space-x-2">
+                  {featuredProducts.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => goToSlide(index)}
+                      className={`w-3 h-3 rounded-full transition-colors ${
+                        index === currentSlide ? 'bg-blue-600' : 'bg-gray-300'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+              
+              {/* Mobile Grid */}
+              <div className="md:hidden">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {featuredProducts.slice(0, 4).map((product) => (
+                    <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                      {product.images && product.images.length > 0 ? (
+                        <img 
+                          src={`data:image/jpeg;base64,${product.images[0]}`}
+                          alt={product.name}
+                          className="w-full h-48 object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                          <span className="text-gray-400 text-sm">Нет изображения</span>
+                        </div>
+                      )}
+                      
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
+                        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
+                        <div className="flex flex-col space-y-2">
+                          <span className="text-xl font-bold text-blue-600">
+                            {product.price} ₽
+                          </span>
+                          <a 
+                            href={`/products/${product.id}`}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-center text-sm"
+                          >
+                            Подробнее
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">Товары не найдены</p>
+            </div>
+          )}
+          
+          <div className="text-center mt-12">
+            <a 
+              href="/products" 
+              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg"
+            >
+              Посмотреть все товары
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Simplified component structure - only include essential components for demo
+const Products = () => <div className="p-8">Страница товаров</div>;
+const ProductDetail = () => <div className="p-8">Детали товара</div>;
+const AdminProducts = () => <div className="p-8">Админ товары</div>;
+const AdminAnalytics = () => <div className="p-8">Аналитика</div>;
+const ProfileCallback = () => <div className="p-8">Обработка входа...</div>;
+
+function App() {
+  return (
+    <AuthProvider>
+      <div className="App">
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/analytics" element={<AdminAnalytics />} />
+            <Route path="/profile" element={<ProfileCallback />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </AuthProvider>
+  );
+}
+
+export default App;
