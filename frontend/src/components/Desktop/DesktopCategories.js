@@ -35,7 +35,7 @@ const DesktopCategories = () => {
     return colors[category] || 'bg-gray-500';
   };
 
-  if (categoriesLoading) {
+  if (categoriesLoading || statsLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <LoadingSpinner size="large" text="Загружаем категории..." />
