@@ -19,6 +19,30 @@ const MobileProducts = () => {
 
   const { categories } = useCategories();
 
+  // Синхронизация с URL параметрами
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (selectedCategory) params.set('category', selectedCategory);
+    if (searchTerm) params.set('search', searchTerm);
+    if (sortBy !== 'name') params.set('sort', sortBy);
+    if (priceRange !== 'all') params.set('priceRange', priceRange);
+    
+    setSearchParams(params);
+  }, [selectedCategory, searchTerm, sortBy, priceRange, setSearchParams]);
+
+  // Обновление состояния при изменении URL
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    const searchParam = searchParams.get('search');
+    const sortParam = searchParams.get('sort');
+    const priceParam = searchParams.get('priceRange');
+    
+    if (categoryParam !== selectedCategory) setSelectedCategory(categoryParam || '');
+    if (searchParam !== searchTerm) setSearchTerm(searchParam || '');
+    if (sortParam !== sortBy) setSortBy(sortParam || 'name');
+    if (priceParam !== priceRange) setPriceRange(priceParam || 'all');
+  }, [searchParams]);
+
   // Функция сортировки товаров
   const sortProducts = (products) => {
     const sortedProducts = [...products];
