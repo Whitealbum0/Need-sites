@@ -209,6 +209,69 @@ const Navbar = () => {
               </div>
             </div>
           )}
+          
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center">
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-gray-700 hover:text-blue-600"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+          
+          {/* Mobile menu */}
+          {isMenuOpen && (
+            <div className="md:hidden">
+              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
+                <a href="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Главная</a>
+                <a href="/products" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Товары</a>
+                
+                {user ? (
+                  <div className="border-t border-gray-200 pt-2">
+                    <div className="flex items-center px-3 py-2">
+                      <span className="text-gray-700">{user.name}</span>
+                      {user.role === 'admin' && (
+                        <span className="ml-2 bg-blue-500 text-white px-2 py-1 rounded-full text-xs">
+                          Админ
+                        </span>
+                      )}
+                    </div>
+                    
+                    {user.role === 'admin' && (
+                      <>
+                        <a href="/admin" className="block px-3 py-2 text-gray-700 hover:bg-gray-100">
+                          Админ панель
+                        </a>
+                        <a href="/admin/products" className="block px-3 py-2 text-gray-700 hover:bg-gray-100">
+                          Управление товарами
+                        </a>
+                        <a href="/admin/analytics" className="block px-3 py-2 text-gray-700 hover:bg-gray-100">
+                          Аналитика
+                        </a>
+                      </>
+                    )}
+                    
+                    <button 
+                      onClick={logout}
+                      className="block w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      Выйти
+                    </button>
+                  </div>
+                ) : (
+                  <button 
+                    onClick={handleLogin}
+                    className="block w-full text-left px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  >
+                    Войти
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </nav>
