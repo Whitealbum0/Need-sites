@@ -90,3 +90,28 @@ export const useCategories = () => {
 
   return { categories, loading, error };
 };
+
+export const useCategoryStats = () => {
+  const [categoryStats, setCategoryStats] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCategoryStats = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${API}/categories/stats`);
+        setCategoryStats(response.data.category_stats);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching category stats:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategoryStats();
+  }, []);
+
+  return { categoryStats, loading, error };
+};
