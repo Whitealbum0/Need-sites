@@ -7,9 +7,48 @@ const API = `${BACKEND_URL}/api`;
 const MobileHome = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Слайд-шоу изображения для Hero секции
+  const heroImages = [
+    {
+      url: "https://images.unsplash.com/photo-1592839930500-3445eb72b8ad?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxvbmxpbmUlMjBzaG9wcGluZ3xlbnwwfHx8Ymx1ZXwxNzUyNDg0Nzk5fDA&ixlib=rb-4.1.0&q=85",
+      title: "Онлайн покупки",
+      subtitle: "Удобные покупки из дома"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85",
+      title: "Модная одежда",
+      subtitle: "Стильные образы каждый день"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1498049794561-7780e7231661?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85",
+      title: "Электроника",
+      subtitle: "Новейшие технологии"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85",
+      title: "Косметика",
+      subtitle: "Красота и уход"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85",
+      title: "Дом и интерьер", 
+      subtitle: "Уютный дом мечты"
+    }
+  ];
 
   useEffect(() => {
     fetchFeaturedProducts();
+  }, []);
+
+  // Автоматическое переключение слайдов каждые 4 секунды
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const fetchFeaturedProducts = async () => {
@@ -21,6 +60,18 @@ const MobileHome = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length);
+  };
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
   };
 
   return (
