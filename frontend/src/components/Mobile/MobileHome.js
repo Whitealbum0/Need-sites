@@ -76,11 +76,11 @@ const MobileHome = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Мобильный Hero Section */}
+      {/* Мобильный Hero Section с пролистываемым слайд-шоу */}
       <div className="bg-gradient-to-br from-blue-600 to-purple-600 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-10"></div>
-        <div className="relative px-4 py-12">
-          <div className="text-center space-y-6">
+        <div className="relative px-4 py-8">
+          <div className="text-center space-y-4 mb-6">
             <h1 className="text-3xl font-bold leading-tight">
               Современный
               <br />
@@ -121,12 +121,63 @@ const MobileHome = () => {
             </div>
           </div>
           
-          <div className="mt-8 px-4">
-            <img 
-              src="https://images.unsplash.com/photo-1592839930500-3445eb72b8ad?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxvbmxpbmUlMjBzaG9wcGluZ3xlbnwwfHx8Ymx1ZXwxNzUyNDg0Nzk5fDA&ixlib=rb-4.1.0&q=85"
-              alt="Мобильные покупки"
-              className="rounded-xl shadow-2xl w-full"
-            />
+          {/* Пролистываемое слайд-шоу */}
+          <div className="relative">
+            <div className="relative overflow-hidden rounded-xl shadow-2xl mx-4">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {heroImages.map((image, index) => (
+                  <div key={index} className="w-full flex-shrink-0 relative">
+                    <img 
+                      src={image.url}
+                      alt={image.title}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <h3 className="text-lg font-bold">{image.title}</h3>
+                      <p className="text-sm text-gray-200">{image.subtitle}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Навигационные кнопки */}
+              <button
+                onClick={prevSlide}
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all z-10"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              
+              <button
+                onClick={nextSlide}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all z-10"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+            
+            {/* Индикаторы слайдов */}
+            <div className="flex justify-center mt-4 space-x-2">
+              {heroImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    index === currentSlide 
+                      ? 'bg-white scale-125' 
+                      : 'bg-white/50 hover:bg-white/75'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
