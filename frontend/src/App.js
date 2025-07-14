@@ -26,6 +26,7 @@ const AppContent = () => {
   // Определяем какие компоненты использовать
   const Navbar = isMobile ? MobileNavbar : DesktopNavbar;
   const Home = isMobile ? MobileHome : DesktopHome;
+  const Products = isMobile ? MobileProducts : DesktopProducts;
 
   return (
     <div className="App">
