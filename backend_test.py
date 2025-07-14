@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Optional
 
 # Configuration
-BASE_URL = "https://b7f67874-c8e5-40c3-a6b3-e2871ce1485f.preview.emergentagent.com/api"
+BASE_URL = "https://8a063d6c-5752-4df9-85f9-6d669b46ccd2.preview.emergentagent.com/api"
 HEADERS = {"Content-Type": "application/json"}
 
 class BackendTester:
