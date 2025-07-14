@@ -248,31 +248,87 @@
   }
 }
 
-/* Enhanced mobile responsiveness */
-@media (max-width: 480px) {
-  .mobile-product-image {
-    height: 180px;
+/* Анимация для прогресс-бара Hero слайд-шоу */
+@keyframes progress {
+  0% {
+    width: 0%;
   }
-  
-  .mobile-product-content {
-    padding: 12px;
+  100% {
+    width: 100%;
   }
-  
-  .mobile-product-title {
-    font-size: 1rem;
+}
+
+/* Улучшенные стили для десктопного Hero слайд-шоу */
+.hero-slideshow {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.hero-slide {
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-slide:hover {
+  transform: scale(1.02);
+}
+
+.hero-nav-button {
+  backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-nav-button:hover {
+  backdrop-filter: blur(16px);
+  transform: scale(1.1);
+}
+
+.hero-indicator {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.hero-indicator:hover {
+  transform: scale(1.2);
+}
+
+.hero-indicator.active {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+/* Анимация появления текста на слайдах */
+.hero-slide-content {
+  animation: slideUpFade 0.8s ease-out;
+}
+
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  
-  .mobile-product-description {
-    font-size: 0.8rem;
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .mobile-product-price {
-    font-size: 1.125rem;
+}
+
+/* Плавная анимация смены слайдов */
+.hero-slides-container {
+  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Эффект параллакса для декоративных элементов */
+.parallax-element {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
   }
-  
-  .mobile-product-button {
-    padding: 10px 12px;
-    font-size: 0.8rem;
+  50% {
+    transform: translateY(-20px);
   }
 }
 
