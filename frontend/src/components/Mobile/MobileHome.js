@@ -152,7 +152,12 @@ const MobileHome = () => {
           
           {/* Пролистываемое слайд-шоу */}
           <div className="relative">
-            <div className="relative overflow-hidden rounded-xl shadow-2xl mx-4">
+            <div 
+              className="relative overflow-hidden rounded-xl shadow-2xl mx-4"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
               <div 
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -163,12 +168,24 @@ const MobileHome = () => {
                       src={image.url}
                       alt={image.title}
                       className="w-full h-48 object-cover"
+                      draggable={false}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-4 left-4 text-white">
                       <h3 className="text-lg font-bold">{image.title}</h3>
                       <p className="text-sm text-gray-200">{image.subtitle}</p>
                     </div>
+                    
+                    {/* Индикатор загрузки для текущего слайда */}
+                    {index === currentSlide && (
+                      <div className="absolute top-4 right-4">
+                        <div className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                          <span className="text-white text-xs font-medium">
+                            {index + 1} / {heroImages.length}
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -191,6 +208,15 @@ const MobileHome = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
+              
+              {/* Подсказка для свайпа (показывается только на первом слайде) */}
+              {currentSlide === 0 && (
+                <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 animate-bounce">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                    <span className="text-white text-xs">👈 Пролистывайте пальцем 👉</span>
+                  </div>
+                </div>
+              )}
             </div>
             
             {/* Индикаторы слайдов */}
