@@ -369,6 +369,35 @@ async def get_categories():
     categories = await db.products.distinct("category")
     return {"categories": categories}
 
+@api_router.get("/categories/stats")
+async def get_category_stats():
+    """Get category statistics"""
+    pipeline = [
+        {"$match": {"status": ProductStatus.ACTIVE}},
+        {"$group": {
+            "_id": "$category",
+            "count": {"$sum": 1},
+            "min_price": {"$min": "$price"},
+            "max_price": {"$max": "$price"},
+            "avg_price": {"$avg": "$price"}
+        }},
+        {"$sort": {"count": -1}}
+    ]
+    
+    stats = await db.products.aggregate(pipeline).to_list(100)
+    
+    # Format the response
+    formatted_stats = {}
+    for stat in stats:
+        formatted_stats[stat["_id"]] = {
+            "count": stat["count"],
+            "min_price": round(stat["min_price"], 2),
+            "max_price": round(stat["max_price"], 2),
+            "avg_price": round(stat["avg_price"], 2)
+        }
+    
+    return {"category_stats": formatted_stats}
+
 # Admin analytics endpoints
 @api_router.get("/admin/analytics")
 async def get_analytics(admin: User = Depends(get_current_admin)):
