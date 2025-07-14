@@ -102,7 +102,7 @@ const MobileCategories = () => {
                       {stats.count || 0} товаров
                       {stats.count > 0 && (
                         <span className="ml-2 text-xs">
-                          • от {Math.round(stats.minPrice)} ₽
+                          • от {Math.round(stats.min_price)} ₽
                         </span>
                       )}
                     </p>
