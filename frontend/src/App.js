@@ -161,8 +161,8 @@ const Navbar = () => {
           
           {/* Mobile menu */}
           {isMenuOpen && (
-            <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
+            <div className="md:hidden absolute top-16 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Главная</a>
                 <a href="/products" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Товары</a>
                 
