@@ -29,6 +29,7 @@ const AppContent = () => {
   const Navbar = isMobile ? MobileNavbar : DesktopNavbar;
   const Home = isMobile ? MobileHome : DesktopHome;
   const Products = isMobile ? MobileProducts : DesktopProducts;
+  const Categories = isMobile ? MobileCategories : DesktopCategories;
 
   return (
     <div className="App">
