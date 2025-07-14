@@ -33,6 +33,7 @@ const AppContent = () => {
   const Home = isMobile ? MobileHome : DesktopHome;
   const Products = isMobile ? MobileProducts : DesktopProducts;
   const Categories = isMobile ? MobileCategories : DesktopCategories;
+  const Cart = isMobile ? MobileCart : DesktopCart;
 
   return (
     <div className="App">
