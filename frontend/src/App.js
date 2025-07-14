@@ -179,20 +179,43 @@ const Navbar = () => {
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     fetchFeaturedProducts();
   }, []);
 
+  useEffect(() => {
+    if (featuredProducts.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % featuredProducts.length);
+      }, 4000); // Автоматическая прокрутка каждые 4 секунды
+
+      return () => clearInterval(interval);
+    }
+  }, [featuredProducts]);
+
   const fetchFeaturedProducts = async () => {
     try {
       const response = await axios.get(`${API}/products`);
-      setFeaturedProducts(response.data.slice(0, 3));
+      setFeaturedProducts(response.data.slice(0, 6)); // Увеличиваем до 6 товаров для слайд-шоу
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % featuredProducts.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + featuredProducts.length) % featuredProducts.length);
+  };
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
   };
 
   return (
