@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 // Контексты
 import { AuthProvider } from './contexts/AuthContext';
@@ -9,20 +11,33 @@ import { CartProvider } from './contexts/CartContext';
 
 // Общие компоненты
 import DeviceSwitcher from './components/Common/DeviceSwitcher';
+import LoadingSpinner from './components/Common/LoadingSpinner';
 
-// Десктопные компоненты
-import DesktopNavbar from './components/Desktop/DesktopNavbar';
-import DesktopHome from './components/Desktop/DesktopHome';
-import DesktopProducts from './components/Desktop/DesktopProducts';
-import DesktopCategories from './components/Desktop/DesktopCategories';
-import DesktopCart from './components/Desktop/DesktopCart';
+// Lazy loading компонентов для code splitting
+const DesktopNavbar = React.lazy(() => import('./components/Desktop/DesktopNavbar'));
+const DesktopHome = React.lazy(() => import('./components/Desktop/DesktopHome'));
+const DesktopProducts = React.lazy(() => import('./components/Desktop/DesktopProducts'));
+const DesktopCategories = React.lazy(() => import('./components/Desktop/DesktopCategories'));
+const DesktopCart = React.lazy(() => import('./components/Desktop/DesktopCart'));
 
-// Мобильные компоненты
-import MobileNavbar from './components/Mobile/MobileNavbar';
-import MobileHome from './components/Mobile/MobileHome';
-import MobileProducts from './components/Mobile/MobileProducts';
-import MobileCategories from './components/Mobile/MobileCategories';
-import MobileCart from './components/Mobile/MobileCart';
+const MobileNavbar = React.lazy(() => import('./components/Mobile/MobileNavbar'));
+const MobileHome = React.lazy(() => import('./components/Mobile/MobileHome'));
+const MobileProducts = React.lazy(() => import('./components/Mobile/MobileProducts'));
+const MobileCategories = React.lazy(() => import('./components/Mobile/MobileCategories'));
+const MobileCart = React.lazy(() => import('./components/Mobile/MobileCart'));
+
+// Создаем клиент для React Query
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 минут
+      cacheTime: 10 * 60 * 1000, // 10 минут
+      refetchOnWindowFocus: false,
+      retry: 3,
+      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
+    },
+  },
+});
 
 // Главный компонент приложения
 const AppContent = () => {
