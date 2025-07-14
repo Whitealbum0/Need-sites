@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Контексты
 import { AuthProvider } from './contexts/AuthContext';
 import { DeviceProvider, useDevice } from './contexts/DeviceContext';
+import { CartProvider } from './contexts/CartContext';
 
 // Общие компоненты
 import DeviceSwitcher from './components/Common/DeviceSwitcher';
