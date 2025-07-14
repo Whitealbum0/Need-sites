@@ -90,6 +90,7 @@ const MobileProducts = () => {
     setSortBy('name');
     setPriceRange('all');
     setIsFilterOpen(false);
+    setSearchParams({});
   };
 
   return (
