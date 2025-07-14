@@ -1,22 +1,14 @@
 import React from 'react';
 import { formatPrice, truncateText } from '../../utils/helpers';
+import CartButton from './CartButton';
 
 const ProductCard = ({ 
   product, 
   variant = 'default', 
   showFullDescription = false,
-  onAddToCart = null,
   onAddToFavorites = null 
 }) => {
   if (!product) return null;
-
-  const handleAddToCart = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (onAddToCart) {
-      onAddToCart(product);
-    }
-  };
 
   const handleAddToFavorites = (e) => {
     e.preventDefault();
