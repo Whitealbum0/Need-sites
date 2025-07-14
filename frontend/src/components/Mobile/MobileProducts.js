@@ -276,7 +276,6 @@ const MobileProducts = () => {
                 key={product.id}
                 product={product}
                 variant="mobile"
-                onAddToCart={(product) => console.log('Add to cart:', product)}
                 onAddToFavorites={(product) => console.log('Add to favorites:', product)}
               />
             ))}
