@@ -12,6 +12,9 @@ export const useProducts = (options = {}) => {
   const {
     category = null,
     search = null,
+    minPrice = null,
+    maxPrice = null,
+    sortBy = null,
     limit = null,
     autoFetch = true
   } = options;
@@ -24,6 +27,9 @@ export const useProducts = (options = {}) => {
       const params = new URLSearchParams();
       if (category) params.append('category', category);
       if (search) params.append('search', search);
+      if (minPrice) params.append('min_price', minPrice);
+      if (maxPrice) params.append('max_price', maxPrice);
+      if (sortBy) params.append('sort_by', sortBy);
 
       const response = await axios.get(`${API}/products?${params}`);
       let productData = response.data;
@@ -45,7 +51,7 @@ export const useProducts = (options = {}) => {
     if (autoFetch) {
       fetchProducts();
     }
-  }, [category, search, limit, autoFetch]);
+  }, [category, search, minPrice, maxPrice, sortBy, limit, autoFetch]);
 
   const refetch = () => {
     fetchProducts();
