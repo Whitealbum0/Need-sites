@@ -8,6 +8,41 @@ const DesktopHome = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
+
+  // Слайд-шоу изображения для Hero секции на десктопе
+  const heroImages = [
+    {
+      url: "https://images.unsplash.com/photo-1592839930500-3445eb72b8ad?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxvbmxpbmUlMjBzaG9wcGluZ3xlbnwwfHx8Ymx1ZXwxNzUyNDg0Nzk5fDA&ixlib=rb-4.1.0&q=85",
+      title: "Премиум онлайн-шопинг",
+      subtitle: "Откройте мир роскошных покупок"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85",
+      title: "Стильная мода",
+      subtitle: "Эксклюзивные коллекции от ведущих брендов"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1498049794561-7780e7231661?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85",
+      title: "Инновационная электроника",
+      subtitle: "Последние технологические новинки"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85",
+      title: "Премиум косметика",
+      subtitle: "Профессиональные средства для красоты"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85",
+      title: "Дизайн интерьера",
+      subtitle: "Создайте дом своей мечты"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85",
+      title: "Спорт и фитнес",
+      subtitle: "Всё для активного образа жизни"
+    }
+  ];
 
   useEffect(() => {
     fetchFeaturedProducts();
@@ -22,6 +57,15 @@ const DesktopHome = () => {
       return () => clearInterval(interval);
     }
   }, [featuredProducts]);
+
+  // Автоматическое переключение Hero слайдов каждые 6 секунд
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentHeroSlide((prev) => (prev + 1) % heroImages.length);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const fetchFeaturedProducts = async () => {
     try {
@@ -44,6 +88,19 @@ const DesktopHome = () => {
 
   const goToSlide = (index) => {
     setCurrentSlide(index);
+  };
+
+  // Функции для управления Hero слайд-шоу
+  const nextHeroSlide = () => {
+    setCurrentHeroSlide((prev) => (prev + 1) % heroImages.length);
+  };
+
+  const prevHeroSlide = () => {
+    setCurrentHeroSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length);
+  };
+
+  const goToHeroSlide = (index) => {
+    setCurrentHeroSlide(index);
   };
 
   return (
