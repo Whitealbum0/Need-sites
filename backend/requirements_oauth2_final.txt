@@ -1,0 +1,32 @@
+# OAuth2 E-commerce Backend Dependencies
+# Основные зависимости для OAuth2 авторизации
+
+# Web Framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+
+# Database
+motor==3.3.2
+pymongo==4.6.1
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# HTTP Client for OAuth2
+httpx==0.26.0
+
+# Environment & Configuration
+python-dotenv==1.0.0
+
+# Data Validation
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# CORS
+python-cors==1.0.0
+
+# Optional: For development
+# uvicorn[standard]==0.27.0  # Includes auto-reload
+# python-multipart==0.0.6    # For form handling
