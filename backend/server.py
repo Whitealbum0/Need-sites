@@ -364,6 +364,28 @@ async def update_product(
         raise HTTPException(status_code=404, detail="Product not found")
     
     update_data = {k: v for k, v in product_data.dict().items() if v is not None}
+    
+    # Сжимаем изображения если они обновляются
+    if update_data.get("images"):
+        compressed_images = []
+        for image_b64 in update_data["images"]:
+            if validate_image_size(image_b64, max_size_mb=10):
+                # Сжимаем изображение
+                compressed_image = compress_image(
+                    image_b64, 
+                    quality=85, 
+                    max_size=(1200, 1200)
+                )
+                compressed_images.append(compressed_image)
+            else:
+                # Слишком большое изображение - возвращаем ошибку
+                raise HTTPException(
+                    status_code=413, 
+                    detail="Изображение слишком большое. Максимальный размер: 10MB"
+                )
+        
+        update_data["images"] = compressed_images
+    
     update_data["updated_at"] = datetime.utcnow()
     
     await db.products.update_one(
