@@ -325,7 +325,30 @@ async def create_product(
     admin: User = Depends(get_current_admin)
 ):
     """Create new product (admin only)"""
-    product = Product(**product_data.dict(), created_by=admin.id)
+    product_dict = product_data.dict()
+    
+    # Сжимаем изображения если они есть
+    if product_dict.get("images"):
+        compressed_images = []
+        for image_b64 in product_dict["images"]:
+            if validate_image_size(image_b64, max_size_mb=10):
+                # Сжимаем изображение
+                compressed_image = compress_image(
+                    image_b64, 
+                    quality=85, 
+                    max_size=(1200, 1200)
+                )
+                compressed_images.append(compressed_image)
+            else:
+                # Слишком большое изображение - возвращаем ошибку
+                raise HTTPException(
+                    status_code=413, 
+                    detail="Изображение слишком большое. Максимальный размер: 10MB"
+                )
+        
+        product_dict["images"] = compressed_images
+    
+    product = Product(**product_dict, created_by=admin.id)
     await db.products.insert_one(product.dict())
     return product
 
