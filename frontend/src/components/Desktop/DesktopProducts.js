@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useProducts, useCategories } from '../../hooks/useProducts';
-import ProductCard from '../Common/ProductCard';
+import OptimizedProductCard from '../Common/OptimizedProductCard';
 import LoadingSpinner from '../Common/LoadingSpinner';
 
 const DesktopProducts = () => {
