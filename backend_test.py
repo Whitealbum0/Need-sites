@@ -10,6 +10,9 @@ import base64
 import time
 from datetime import datetime
 from typing import Dict, Optional
+from PIL import Image
+import io
+import os
 
 # Configuration
 BASE_URL = "https://5ba4e4d5-4534-42bd-a52f-73984b9e639a.preview.emergentagent.com/api"
