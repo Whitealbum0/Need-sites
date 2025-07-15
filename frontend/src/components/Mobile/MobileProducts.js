@@ -272,7 +272,7 @@ const MobileProducts = () => {
         ) : (
           <div className="space-y-4">
             {filteredAndSortedProducts.map((product) => (
-              <ProductCard
+              <OptimizedProductCard
                 key={product.id}
                 product={product}
                 variant="mobile"
