@@ -13,6 +13,7 @@ import httpx
 import json
 from enum import Enum
 import base64
+from image_utils import compress_image, create_thumbnail, get_image_info, validate_image_size
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
