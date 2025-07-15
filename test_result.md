@@ -348,14 +348,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Device Detection and Switching System"
-    - "Desktop Interface Components"
-    - "Mobile Interface Components"
-    - "Device Switcher Widget"
-    - "User Authentication with Emergent Auth"
-    - "Product Catalog and Management"
+    - "Image Compression and Optimization"
+    - "Performance Optimization - Component and Image Loading"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
