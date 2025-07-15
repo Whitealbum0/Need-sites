@@ -1006,6 +1006,18 @@ class BackendTester:
         self.test_combined_filtering()
         self.test_edge_cases()
         
+        # NEW: Image Compression and Optimization Tests
+        print("\n🖼️ IMAGE COMPRESSION & OPTIMIZATION TESTS")
+        print("-" * 40)
+        self.test_image_compression_create_product()
+        self.test_image_size_validation()
+        self.test_image_compression_quality()
+        self.test_invalid_image_format()
+        self.test_corrupted_image_data()
+        self.test_multiple_images_compression()
+        self.test_performance_impact_measurement()
+        self.test_image_update_endpoint_compression()
+        
         # Visitor tracking tests
         print("\n📊 VISITOR TRACKING TESTS")
         print("-" * 40)
